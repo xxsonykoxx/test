@@ -31,7 +31,7 @@ let data = [
     }
   ];
 
- 
+
   
   let travelInfo='';
   let travelNum=0;
@@ -47,7 +47,7 @@ let data = [
   const travelGroup=document.querySelector('.travelGroup');
   const travelText=document.querySelector('.travelText');
 
-
+showTravelInfo(data);
 //   function showCard(){
 //     travelInfo+=
 //     `
@@ -102,10 +102,10 @@ let data = [
   })
 
 
-  //顯示套票
-  function showTravelInfo(){
-      travelInfo='';
-  data.forEach(function(item,index){
+  /* 渲染函式， 參數為要渲染的陣列。 */
+  function showTravelInfo(data){
+  travelInfo='';
+  data.forEach(function(item){
     travelInfo+=
     `
     <li>
@@ -124,57 +124,25 @@ let data = [
     `
   })
   list.innerHTML=travelInfo;
+  showSearchNum.textContent=`本次搜尋共 ${data.length} 筆資料`; /* 直接取陣列長度 */
 }
 
 
 //搜尋套票
 searchLocation.addEventListener('change',function(e){
-    travelNum=0;
-    travelInfo='';
+    /* 建立一個篩選後要 push 進去的陣列 */
+    let areaFilter = [];
     data.forEach(function(item,index){
         if(e.target.value==item.area){
-            travelNum++;
-            travelInfo+=
-            `
-            <li>
-            <span class="location">${item.area}</span>
-            <span class="starlevel">${item.rate}</span>
-            <img src="${item.imgUrl}"alt="">
-            <div class="travelDescription">
-                <h2>${item.name}</h2>
-                <p>${item.description}</p>
-                <div class="travelCost">
-                    <span><i class="fas fa-exclamation-circle"></i>剩下最後 ${item.group} 組</span>
-                    <p>TWD<span>${item.price}</span></p>
-                </div>
-            </div>
-        </li>
-            `
-            
-           
-    }else if(e.target.value=="全部地區"){
-        travelNum++;
-        travelInfo+=
-        `
-        <li>
-        <span class="location">${item.area}</span>
-        <span class="starlevel">${item.rate}</span>
-        <img src="${item.imgUrl}"alt="">
-        <div class="travelDescription">
-            <h2>${item.name}</h2>
-            <p>${item.description}</p>
-            <div class="travelCost">
-                <span><i class="fas fa-exclamation-circle"></i>剩下最後 ${item.group} 組</span>
-                <p>TWD<span>${item.price}</span></p>
-            </div>
-        </div>
-    </li>
-        `
+          /* 篩選完， 將物件塞入陣列 */
+            areaFilter.push(item);
+            showTravelInfo(areaFilter);  /* 渲染函式（ 參數：篩選完的陣列 ） */
     }
-
-    })
+    else if(e.target.value=="全部地區"){
+      showTravelInfo(data);  /* 如果是全部地區， 就代入未篩選的 data */
+    }
+  })
    list.innerHTML=travelInfo;
-   showSearchNum.textContent=`本次搜尋共 ${travelNum} 筆資料`;
 })
 
 
@@ -183,4 +151,4 @@ searchLocation.addEventListener('change',function(e){
 
 
 
-showTravelInfo();
+
